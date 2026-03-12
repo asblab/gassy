@@ -339,12 +339,7 @@ else
     else
         git clone https://github.com/steveyegge/gastown.git "$GASTOWN_SRC"
     fi
-    # Patch: last_heartbeat -> timestamp (JSON field mismatch)
-    if grep -q 'json:"last_heartbeat"' "$GASTOWN_SRC/internal/web/fetcher.go" 2>/dev/null; then
-        sed -i 's/json:"last_heartbeat"/json:"timestamp"/' "$GASTOWN_SRC/internal/web/fetcher.go"
-        ok "Applied last_heartbeat -> timestamp patch"
-    fi
-    (cd "$GASTOWN_SRC" && go build -o "$HOME/go/bin/gt" ./cmd/gt)
+(cd "$GASTOWN_SRC" && go build -o "$HOME/go/bin/gt" ./cmd/gt)
     command -v gt >/dev/null 2>&1 || fail "Gas Town build failed"
     ok "Gas Town $(gt version 2>/dev/null | grep 'gt version' | awk '{print $3}') installed"
 fi
