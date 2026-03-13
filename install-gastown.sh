@@ -396,6 +396,11 @@ else
     curl -fsSL https://tailscale.com/install.sh | sudo bash
     command -v tailscale >/dev/null 2>&1 || fail "Tailscale installation failed"
     ok "Tailscale $(tailscale version | head -1) installed"
+    # Wait for tailscaled to be ready (up to 15s)
+    for i in $(seq 1 15); do
+        tailscale status &>/dev/null && break
+        sleep 1
+    done
 fi
 
 NEED_TS_AUTH=false
